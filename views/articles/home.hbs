@@ -1,1 +1,24 @@
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Tin Tức Mới Nhất</h1>
+    <div class="row">
+        {{#each articles}}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    <p class="card-text">{{this.abstract}}</p>
+
+                    <!-- Hiển thị icon nếu bài viết là premium -->
+                    {{#if this.is_premium}}
+                        <span class="badge bg-warning">⭐ Premium</span>
+                    {{/if}}
+
+                    <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
 
