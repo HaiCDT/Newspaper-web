@@ -1,1 +1,26 @@
+<div class="container mt-4">
+  <div class="article-header text-center">
+    <h1 class="article-title">{{article.title}}</h1>
+    <p class="article-author text-muted">By <strong>{{article.author}}</strong></p>
+    <p class="article-category text-primary">Category: {{article.category_name}}</p>
+    <p class="article-abstract"><strong>Abstract:</strong> {{article.abstract}}</p>
+  </div>
+  <hr>
+  <div class="article-content">
+    {{{article.content}}} <!-- Nội dung định dạng HTML -->
+  </div>
+
+  <!-- Image Section -->
+  <div class="article-images mt-4">
+    <h3>Images</h3>
+    <div class="row">
+      {{#each article.images}}
+      <div class="col-md-4">
+        <img src="/uploads/{{this}}" class="img-fluid img-thumbnail" alt="Article Image">
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  <a href="/articles/home" class="btn btn-secondary mt-3">Quay lại</a>
+</div>
 
