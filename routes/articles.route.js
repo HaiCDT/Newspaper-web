@@ -1,7 +1,8 @@
 import express from 'express';
 import articleService from '../service/article.service.js';
 import multer from 'multer';
-const upload = multer({ dest: 'uploads/' })
+import path from 'path';
+import fs from 'fs';
 const router = express.Router();
 router.post('/create', upload.single('image'), function (req, res, next) {
   // req.file is the `avatar` file
@@ -52,12 +53,28 @@ router.post('/delete/:id', async (req, res) => {
     res.status(500).send('Lỗi khi xóa bài viết');
   }
 });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Thư mục lưu file
+  },
+  filename: function (req, file, cb) {
+    const tempName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
+    cb(null, tempName); // Lưu file với tên tạm
+  },
+});
+const upload = multer({ storage });
 // Route: Lưu bài viết mới vào cơ sở dữ liệu
-router.post('/create', async (req, res) => {
-  const { title, author, category_id, content , abstract} = req.body;
-  const is_premium = req.body.is_premium === 'on'; // Lấy giá trị checkbox
+router.post('/create', upload.single('image'), async (req, res) => {
+  const { title, author, category_id, content, abstract } = req.body;
+  const is_premium = req.body.is_premium === 'on'; // Giá trị checkbox
+  const uploadedFile = req.file; // Lấy file từ request
+
   try {
-    // Lưu bài viết mới vào cơ sở dữ liệu
+    if (!uploadedFile) {
+      return res.status(400).send('Hình ảnh là bắt buộc');
+    }
+
+    // Tạo bài viết mới
     const newArticle = await articleService.create({
       title,
       author,
@@ -66,10 +83,20 @@ router.post('/create', async (req, res) => {
       is_premium,
       abstract,
     });
-    // Chuyển hướng đến trang bài viết sau khi lưu thành công
-    res.redirect(`/articles/${newArticle.id}`);
+
+    // Đường dẫn mới cho file
+    const newFileName = `uploads/${newArticle.id}.png`;
+
+    // Đổi tên file tạm thành file đích với ID bài viết
+    fs.renameSync(uploadedFile.path, newFileName);
+
+    // Lưu đường dẫn file vào cơ sở dữ liệu (nếu cần)
+    await articleService.update(newArticle.id, { imageURL: newFileName });
+
+    // Hoàn thành xử lý
+    res.redirect('/articles/home');
   } catch (error) {
-    console.error(error);
+    console.error('Lỗi khi tạo bài viết:', error);
     res.status(500).send('Lỗi khi tạo bài viết');
   }
 });
