@@ -9,10 +9,24 @@ router.post('/create', upload.single('image'), function (req, res, next) {
 })
 router.get('/home', async (req, res) => {
   try {
-    // Fetch latest articles
-    const articles = await articleService.findLatest(6); // Lấy 6 bài viết mới nhất
+    // Lấy các bài viết nổi bật trong tuần (4 bài)
+    const topArticlesThisWeek = await articleService.getTopArticlesThisWeek();
+
+    // Lấy các bài viết xem nhiều nhất
+    const topViewedArticles = await articleService.getTopViewedArticles();
+
+    // Lấy các bài viết mới nhất
+    const latestArticles = await articleService.getLatestArticles();
+
+    // Lấy 10 chuyên mục và bài viết có lượt xem cao nhất trong mỗi chuyên mục
+    const topCategories = await articleService.getTopCategories();
+
+    // Render trang chủ với dữ liệu đã lấy
     res.render('articles/home', {
-      articles,
+      topArticlesThisWeek,
+      topViewedArticles,
+      latestArticles,
+      topCategories,
       layout: 'main'
     });
   } catch (error) {
@@ -94,6 +108,7 @@ router.get('/', async (req, res) => {
 router.get('/detail', async (req, res) => {
   const id = parseInt(req.query.id) || 0;
   const article = await articleService.findById(id); // Lấy chi tiết bài viết theo ID
+  await articleService.incrementView(id);
   if (!article) {
     return res.status(404).send('Bài viết không tồn tại');
   }
