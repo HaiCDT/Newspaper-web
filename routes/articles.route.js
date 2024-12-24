@@ -137,4 +137,27 @@ router.get('/:id', async (req, res) => {
     res.status(500).send('Lỗi khi lấy chi tiết bài viết');
   }
 });
+router.get('/:id', async (req, res) => {
+  const articleId = parseInt(req.params.id); // Lấy ID từ URL
+
+  try {
+    // Gọi service để lấy bài viết theo ID
+    const article = await articleService.findById(articleId);
+
+    // Kiểm tra nếu không tìm thấy bài viết
+    if (!article) {
+      return res.status(404).send('Bài viết không tồn tại');
+    }
+
+    // Render trang chi tiết bài viết
+    res.render('articles/detail', { article },
+      {
+        layout: 'detail_content' // Dùng layout main.hbs
+      }
+    );
+  } catch (error) {
+    console.error('Lỗi khi lấy chi tiết bài viết:', error);
+    res.status(500).send('Lỗi khi lấy chi tiết bài viết');
+  }
+});
 export default router;
