@@ -37,7 +37,6 @@ const create = async (articleData) => {
     throw new Error('Lỗi khi lưu bài viết');
   }
 };
-
 const findAll = async () => {
   try {
     const rows = await knex('articles')
@@ -246,6 +245,21 @@ const findTop5ByCategory = async (categoryId) => {
     throw new Error('Lỗi khi lấy danh sách bài viết theo danh mục và lượt xem');
   }
 };
+const update = async (articleId, updateData) => {
+  try {
+    // Cập nhật bài viết dựa trên ID
+    await knex('articles').where('id', articleId).update(updateData);
+
+    // Lấy lại bài viết đã cập nhật
+    const updatedArticle = await knex('articles').where('id', articleId).first();
+
+    return updatedArticle;
+  } catch (err) {
+    console.error('Lỗi khi cập nhật bài viết:', err);
+    throw new Error('Lỗi khi cập nhật bài viết');
+  }
+};
+
 export default {
   findAll,
   countAll,
@@ -262,5 +276,6 @@ export default {
   getTopCategories,
   findByCategory,
   findTop5ByCategory,
+  update,
 };
 
