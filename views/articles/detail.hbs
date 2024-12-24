@@ -5,6 +5,7 @@
     <p class="article-author text-muted">By <strong>{{article.author}}</strong></p>
     <p class="article-category text-primary">Category: {{article.category_name}}</p>
     <p class="article-abstract"><strong>Abstract:</strong> {{article.abstract}}</p>
+    <img src="/uploads/{{article.id}}.png" class="img-fluid img-thumbnail" alt="Article Image">
   </div>
 
   <hr>
@@ -13,23 +14,6 @@
   <div class="article-content">
     {{{article.content}}} <!-- Nội dung bài viết có thể chứa HTML -->
   </div>
-
-  <!-- Image Section -->
-  <div class="article-images mt-4">
-    <h3>Images</h3>
-    {{#if article.images.length}}
-    <div class="row">
-      {{#each article.images}}
-      <div class="col-md-4">
-        <img src="/uploads/{{this}}" class="img-fluid img-thumbnail" alt="Article Image">
-      </div>
-      {{/each}}
-    </div>
-    {{else}}
-      <p>Không có hình ảnh cho bài viết này.</p>
-    {{/if}}
-  </div>
-
   <!-- Related Articles Section -->
   <div class="container mt-4">
     <h2 class="text-center mb-4">Bài viết liên quan</h2>
