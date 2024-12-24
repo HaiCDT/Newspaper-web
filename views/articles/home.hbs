@@ -1,24 +1,115 @@
-<div class="container mt-4">
-    <h1 class="text-center mb-4">Tin Tức Mới Nhất</h1>
-    <div class="row">
-        {{#each articles}}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
-                <div class="card-body">
-                    <h5 class="card-title">{{this.title}}</h5>
-                    <p class="card-text">{{this.abstract}}</p>
-
-                    <!-- Hiển thị icon nếu bài viết là premium -->
-                    {{#if this.is_premium}}
-                        <span class="badge bg-warning">⭐ Premium</span>
-                    {{/if}}
-
-                    <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
-                </div>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang chủ</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .carousel-item {
+      transition: transform 1s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <!-- Section 1: Bài viết nổi bật trong tuần -->
+    <h1 class="text-center mb-4">Bài Viết Nổi Bật Trong Tuần</h1>
+    <div id="topArticlesCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {{#each topArticlesThisWeek}}
+        <div class="carousel-item {{#if @first}}active{{/if}}">
+          <div class="card">
+            <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+            <div class="card-body">
+              <h5 class="card-title">{{this.title}}</h5>
+              <p class="card-text">{{this.abstract}}</p>
+              <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
             </div>
+          </div>
         </div>
         {{/each}}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#topArticlesCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#topArticlesCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
-</div>
 
+    <!-- Section 2: Bài viết xem nhiều nhất -->
+    <h1 class="text-center mb-4">Bài Viết Xem Nhiều Nhất</h1>
+    <div class="row">
+      {{#each topViewedArticles}}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+          <div class="card-body">
+            <h5 class="card-title">{{this.title}}</h5>
+            <p class="card-text">{{this.abstract}}</p>
+            <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+    <!-- Section 3: Bài viết mới nhất -->
+    <h1 class="text-center mb-4">Bài Viết Mới Nhất</h1>
+    <div class="row">
+      {{#each latestArticles}}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+          <div class="card-body">
+            <h5 class="card-title">{{this.title}}</h5>
+            <p class="card-text">{{this.abstract}}</p>
+            <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+<!-- Hiển thị top categories với bài viết có lượt xem cao nhất -->
+<h1 class="text-center mb-4">Các Chuyên Mục Với Bài Viết Nổi Bật</h1>
+<div class="row">
+  {{#each topCategories}} <!-- Duyệt qua mỗi chuyên mục trong topCategories -->
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <!-- Hiển thị tên chuyên mục -->
+      <div class="card-header bg-primary text-white text-center">
+        <h5>{{this.category.category_name}}</h5> <!-- Hiển thị tên chuyên mục -->
+      </div>
+      
+      <!-- Hiển thị ảnh của bài viết -->
+      <img src="{{this.article.imageURL}}" class="card-img-top" alt="{{this.article.title}}">
+      
+      <div class="card-body">
+        <!-- Hiển thị tiêu đề bài viết -->
+        <h5 class="card-title">{{this.article.title}}</h5>
+        
+        <!-- Hiển thị lượt xem của bài viết -->
+        <p class="card-text">Lượt xem: {{this.article.views}}</p>
+        
+        <!-- Liên kết để đọc thêm -->
+        <a href="/articles/detail?id={{this.article.id}}" class="btn btn-primary">Đọc thêm</a>
+      </div>
+    </div>
+  </div>
+  {{/each}} <!-- Kết thúc vòng lặp each -->
+</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Đặt timer để chuyển bài viết tự động trong carousel
+    setInterval(function() {
+      var carousel = new bootstrap.Carousel(document.getElementById('topArticlesCarousel'));
+      carousel.next();
+    }, 5000); // Mỗi 5 giây chuyển bài viết
+  </script>
+</body>
+</html>
