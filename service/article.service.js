@@ -201,6 +201,51 @@ const incrementView = async (articleId) => {
     throw new Error('Lỗi khi cập nhật lượt xem');
   }
 };
+const findByCategory = async (categoryId) => {
+  try {
+    const rows = await knex('articles')
+      .join('categories', 'articles.category_id', '=', 'categories.id')
+      .select(
+        'articles.id',
+        'articles.title',
+        'articles.author',
+        'articles.abstract',
+        'articles.content',
+        'articles.is_premium',
+        'articles.views',
+        'categories.category_name'
+      )
+      .where('categories.id', categoryId);
+
+    return rows;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Lỗi khi lấy danh sách bài viết theo danh mục');
+  }
+};
+const findTop5ByCategory = async (categoryId) => {
+  try {
+    const rows = await knex('articles')
+      .join('categories', 'articles.category_id', '=', 'categories.id')
+      .select(
+        'articles.id',
+        'articles.title',
+        'articles.author',
+        'articles.abstract',
+        'articles.content',
+        'articles.is_premium',
+        'categories.category_name'
+      )
+      .where('articles.category_id', categoryId)
+      .orderBy('articles.views', 'desc') // Sắp xếp giảm dần theo lượt xem
+      .limit(5); // Giới hạn chỉ lấy 5 bài viết
+
+    return rows;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Lỗi khi lấy danh sách bài viết theo danh mục và lượt xem');
+  }
+};
 export default {
   findAll,
   countAll,
@@ -215,5 +260,7 @@ export default {
   getTopArticlesByCategory,
   getTopArticlesThisWeek,
   getTopCategories,
+  findByCategory,
+  findTop5ByCategory,
 };
 
