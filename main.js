@@ -29,7 +29,7 @@ app.engine('hbs', engine({
 }));
 app.set('view engine', 'hbs');
 app.set('views', './views');
-app.use('/static', express.static('static'));
+app.use('/uploads', express.static('uploads'));
 app.use('/articles', articlesRouter);
 app.get('/', (req, res) => res.redirect('/articles/home'));
 import articlesRouter from './routes/articles.route.js';
