@@ -1,0 +1,96 @@
+{{#fillHtmlContent 'css'}}
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+{{/fillHtmlContent}}
+
+{{#fillHtmlContent 'js'}}
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+<script>
+  $('#txtDOB').datetimepicker({
+    timepicker: false,
+    format: 'd/m/Y',
+    mask: true,
+  });
+
+  $('#frmRegister').on('submit', function (e) {
+    e.preventDefault();
+
+    const username = $('#txtUsername').val();
+    const password = $('#txtPassword').val();
+    const confirmPassword = $('#txtConfirmPassword').val();
+
+    if (username.length === 0) {
+      alert('Username is required');
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('Password is required and its length should be at least 6 characters');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert('Password and Confirm Password do not match');
+      return;
+    }
+
+    $.getJSON(`/account/is-available?username=${username}`, function (data) {
+      if (data === false) {
+        alert('Username is already taken.');
+      } else {
+        $('#frmRegister').off('submit').submit();
+      }
+    });
+
+    // $('#frmRegister').off('submit').submit();
+  });
+</script>
+{{/fillHtmlContent}}
+
+<form id="frmRegister" action="" method="post">
+  <div class="card">
+    <h5 class="card-header">
+      Account Registration
+    </h5>
+    <div class="card-body">
+      <h5>Account Information</h5>
+      <div class="form-group">
+        <label for="txtUsername">Username</label>
+        <input type="text" name="username" id="txtUsername" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="txtPassword">Password</label>
+        <input type="password" name="raw_password" id="txtPassword" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="txtConfirmPassword">Confirm Password</label>
+        <input type="password" name="" id="txtConfirmPassword" class="form-control" placeholder="">
+      </div>
+
+      <h5>Personal Information</h5>
+      <div class="form-group">
+        <label for="txtName">Name</label>
+        <input type="text" name="name" id="txtName" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="txtEmail">Email</label>
+        <input type="text" name="email" id="txtEmail" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="txtDOB">Date of Birth</label>
+        <input type="text" name="raw_dob" id="txtDOB" class="form-control" placeholder="">
+      </div>
+    </div>
+    <div class="card-footer text-muted">
+      <a class="btn btn-outline-success" href="/" role="button">
+        <i class="bi bi-house-fill"></i>
+        Home
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-person-plus-fill"></i>
+        Register
+      </button>
+    </div>
+  </div>
+</form>
