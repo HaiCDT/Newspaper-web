@@ -5,10 +5,6 @@ import path from 'path';
 import fs from 'fs';
 import { isAuth } from '../middlewares/auth.mdw.js';
 const router = express.Router();
-router.post('/create', upload.single('image'), function (req, res, next) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-})
 router.get('/home', async (req, res) => {
   try {
     // Lấy các bài viết nổi bật trong tuần (4 bài)
