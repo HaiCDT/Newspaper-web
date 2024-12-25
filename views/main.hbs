@@ -1,17 +1,168 @@
-<div class="container mt-4">
-    <h1 class="text-center mb-4">Tin Tức Mới Nhất</h1>
-    <div class="row">
-        {{#each articles}}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
-                <div class="card-body">
-                    <h5 class="card-title">{{this.title}}</h5>
-                    <p class="card-text">{{this.abstract}}</p>
-                    <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
-                </div>
-            </div>
-        </div>
-        {{/each}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories Menu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .navbar {
+            background-color: #0056b3;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .navbar-nav .nav-item {
+            display: inline-block;
+        }
+        .dropdown-menu {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .search-bar {
+            width: 200px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- Technology -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="technologyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Technology
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="technologyDropdown">
+                        <a class="dropdown-item" href="#">Artificial Intelligence</a>
+                        <a class="dropdown-item" href="#">Blockchain</a>
+                    </div>
+                </li>
+                <!-- Science -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="scienceDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Science
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="scienceDropdown">
+                        <a class="dropdown-item" href="#">Physics</a>
+                        <a class="dropdown-item" href="#">Biology</a>
+                    </div>
+                </li>
+                <!-- Health -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="healthDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Health
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="healthDropdown">
+                        <a class="dropdown-item" href="#">Nutrition</a>
+                        <a class="dropdown-item" href="#">Fitness</a>
+                    </div>
+                </li>
+                <!-- Travel -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="travelDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Travel
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="travelDropdown">
+                        <a class="dropdown-item" href="#">Destinations</a>
+                        <a class="dropdown-item" href="#">Travel Tips</a>
+                    </div>
+                </li>
+                <!-- Lifestyle -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="lifestyleDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Lifestyle
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="lifestyleDropdown">
+                        <a class="dropdown-item" href="#">Home Decor</a>
+                        <a class="dropdown-item" href="#">Personal Finance</a>
+                    </div>
+                </li>
+                <!-- Education -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="educationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Education
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="educationDropdown">
+                        <a class="dropdown-item" href="#">Online Learning</a>
+                        <a class="dropdown-item" href="#">Scholarships</a>
+                    </div>
+                </li>
+                <!-- Business -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="businessDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Business
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="businessDropdown">
+                        <a class="dropdown-item" href="#">Entrepreneurship</a>
+                        <a class="dropdown-item" href="#">Marketing</a>
+                    </div>
+                </li>
+                <!-- Sports -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="sportsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="sportsDropdown">
+                        <a class="dropdown-item" href="#">Football</a>
+                        <a class="dropdown-item" href="#">Basketball</a>
+                    </div>
+                </li>
+                <!-- Entertainment -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="entertainmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Entertainment
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="entertainmentDropdown">
+                        <a class="dropdown-item" href="#">Movies</a>
+                        <a class="dropdown-item" href="#">Music</a>
+                    </div>
+                </li>
+            </ul>            
+            <!-- Search Bar -->
+            <form class="form-inline ml-auto">
+                <input class="form-control search-bar" type="search" placeholder="Search" aria-label="Search">
+            </form>
+            <ul class="navbar-nav ml-auto">
+                {{#if authUser}}
+             <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                     Hello, <b>{{authUser.name}}</b>
+                 </a>
+             <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="/account/profile">
+                <i class="bi bi-person"></i> Profile
+                </a>
+                <a class="dropdown-item" href="/account/update-password">
+                 <i class="bi bi-gear"></i> Change password
+                 </a>
+            <div class="dropdown-divider"></div>
+                <form id="frmLogout" action="/account/logout" method="post"></form>
+            <a class="dropdown-item" href="javascript: $('#frmLogout').submit()">
+                <i class="bi bi-box-arrow-right"></i> Sign out
+                </a>
     </div>
-</div>
+  </li>
+  {{else}}
+  <li class="nav-item">
+    <a class="btn btn-primary" href="/account/login">Login</a>
+  </li>
+  <li class="nav-item">
+    <a class="btn btn-primary" href="/account/register">Register</a>
+  </li>
+  {{/if}}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {{{body}}}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
