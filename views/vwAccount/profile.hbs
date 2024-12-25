@@ -1,0 +1,27 @@
+<form action="" method="post">
+  <div class="card">
+    <h4 class="card-header">
+      Profile
+    </h4>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="txtUsername">Username</label>
+        <input type="text" value="{{this.user.username}}" name="" id="txtUsername" class="form-control" placeholder="" readonly>
+      </div>
+      <div class="form-group">
+        <label for="txtName">Name</label>
+        <input type="text" value="{{this.user.name}}" name="" id="txtName" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="txtEmail">Email</label>
+        <input type="text" value="{{this.user.email}}" name="" id="txtEmail" class="form-control" placeholder="">
+      </div>
+    </div>
+    <div class="card-footer text-muted">
+      <button type="submit" class="btn btn-success">
+        <i class="bi bi-check2"></i>
+        Save
+      </button>
+    </div>
+  </div>
+</form>
