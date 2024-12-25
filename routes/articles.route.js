@@ -3,6 +3,7 @@ import articleService from '../service/article.service.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { isAuth } from '../middlewares/auth.mdw.js';
 const router = express.Router();
 router.post('/create', upload.single('image'), function (req, res, next) {
   // req.file is the `avatar` file
@@ -134,34 +135,47 @@ router.get('/', async (req, res) => {
 // Route: Hiển thị chi tiết bài viết
 router.get('/detail', async (req, res) => {
   const id = parseInt(req.query.id) || 0;
-  const article = await articleService.findById(id); // Lấy chi tiết bài viết theo ID
-  await articleService.incrementView(id);
-  if (!article) {
-    return res.status(404).send('Bài viết không tồn tại');
-  }
-  res.render('articles/detail', { article: article });
-});
-router.get('/:id', async (req, res) => {
-  const articleId = parseInt(req.params.id); // Lấy ID từ URL
 
   try {
-    // Gọi service để lấy bài viết theo ID
-    const article = await articleService.findById(articleId);
+    const article = await articleService.findById(id); // Lấy chi tiết bài viết theo ID
 
-    // Kiểm tra nếu không tìm thấy bài viết
     if (!article) {
       return res.status(404).send('Bài viết không tồn tại');
     }
 
-    // Render trang chi tiết bài viết
-    res.render('articles/detail', { article },
-      {
-        layout: 'detail_content' // Dùng layout main.hbs
+    // Kiểm tra bài viết Premium
+    if (article.is_premium) {
+      // Nếu người dùng chưa đăng nhập
+      if (!req.session.authUser) {
+        return res.status(403).render('403', {
+          message: 'Bạn cần đăng nhập và có quyền Premium để xem bài viết này.',
+        });
       }
-    );
+
+      // Nếu người dùng đăng nhập nhưng không có quyền Premium
+      if (req.session.authUser.permission < 2) {
+        return res.status(403).render('403', {
+          message: 'Bạn cần đăng ký gói Premium để xem bài viết này.',
+        });
+      }
+    }
+
+    // Lấy bài viết cùng danh mục và 5 bài viết liên quan
+    const category = await articleService.findByCategory(id);
+    const top5category = await articleService.findTop5ByCategory(id);
+
+    // Tăng lượt xem bài viết
+    await articleService.incrementView(id);
+
+    // Truyền dữ liệu vào view
+    res.render('articles/detail', { 
+      article: article,
+      category: category, // Các bài viết cùng danh mục
+      top5category: top5category, // 5 bài viết liên quan
+    });
   } catch (error) {
-    console.error('Lỗi khi lấy chi tiết bài viết:', error);
-    res.status(500).send('Lỗi khi lấy chi tiết bài viết');
+    console.error(error);
+    res.status(500).send('Lỗi server');
   }
 });
 router.get('/:id', async (req, res) => {
